@@ -1,6 +1,6 @@
 # Space Defender
 
-Jogo 2D em Python e Pygame desenvolvido para a disciplina de Linguagem de Programacao Aplicada.
+Jogo 2D em Python e Pygame desenvolvido para a disciplina de Linguagem de Programação Aplicada.
 
 ## Requisitos
 
@@ -8,7 +8,7 @@ Jogo 2D em Python e Pygame desenvolvido para a disciplina de Linguagem de Progra
 - Windows
 - Pygame
 
-## Instalacao
+## Instalação
 
 ```powershell
 python -m venv .venv
@@ -16,7 +16,7 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-## Execucao
+## Execução
 
 ```powershell
 python main.py
@@ -32,14 +32,14 @@ python main.py
 
 ## Objetivo
 
-Controle a nave na parte inferior da tela, destrua os inimigos que descem do topo e sobreviva ate vencer.
+Controle a nave na parte inferior da tela, destrua os inimigos que descem do topo e sobreviva até vencer.
 
 O jogador vence ao destruir 50 inimigos ou sobreviver por 180 segundos. A derrota acontece quando as 3 vidas acabam.
 
-No menu inicial, a opcao `Instrucoes` mostra o objetivo, as condicoes de fim de jogo e os controles.
+No menu inicial, a opção `Instruções` mostra o objetivo, as condições de fim de jogo e os controles.
 
-Ao final de cada partida, o jogo pede o nome do jogador e salva a pontuacao localmente em `data/high_score.txt`.
-A tela `Pontuacao` mostra as 10 melhores pontuacoes, ordenadas por maior numero de pontos e, em caso de empate, pelo menor tempo.
+Ao final de cada partida, o jogo pede o nome do jogador e salva a pontuação localmente em `data/high_score.txt`.
+A tela `Pontuação` mostra as 10 melhores pontuações, ordenadas por maior número de pontos e, em caso de empate, pelo menor tempo.
 
 ## Estrutura
 
@@ -60,19 +60,17 @@ requirements.txt
 README.md
 ```
 
-## Gerar executavel com PyInstaller
+## Gerar executável com PyInstaller
 
-Instale as dependencias e execute:
+Depois de instalar as dependências (passo Instalação) basta executar o comando abaixo:
 
 ```powershell
 pyinstaller --onefile --windowed main.py
 ```
 
-Depois de compilar, copie a pasta `assets` para o mesmo diretorio do executavel gerado em `dist`.
+Depois de compilar, copie a pasta `assets` para o mesmo diretório do executável gerado em `dist`.
 
-Para entregar em ZIP, compacte o executavel gerado e a pasta `assets`.
-
-Estrutura esperada apos a compilacao:
+Estrutura esperada apos a compilação:
 
 ```text
 dist/
