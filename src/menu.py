@@ -38,11 +38,11 @@ class Menu:
         while True:
             self.screen.blit(self.background, (0, 0))
             self.ui.clear_with_panel()
-            self.ui.draw_text("Pontuacao", "large", YELLOW, center=(SCREEN_WIDTH // 2, 74))
+            self.ui.draw_text("Pontuação", "large", YELLOW, center=(SCREEN_WIDTH // 2, 74))
             self.ui.draw_text("Pos  Nome          Pontos  Tempo", "small", WHITE, center=(SCREEN_WIDTH // 2, 112))
 
             if not scores:
-                self.ui.draw_text("Nenhuma pontuacao salva.", "normal", WHITE, center=(SCREEN_WIDTH // 2, 184))
+                self.ui.draw_text("Nenhuma pontuação salva.", "normal", WHITE, center=(SCREEN_WIDTH // 2, 184))
             else:
                 for index, item in enumerate(scores[:10], start=1):
                     line = f"{index:02d}   {str(item['name'])[:12]:<12}  {int(item['score']):>5}   {int(item['time']):>3}s"
@@ -60,24 +60,37 @@ class Menu:
 
     def show_controls(self) -> None:
         lines = (
-            "Objetivo: destruir inimigos e sobreviver.",
-            "Vitoria: 50 inimigos ou 180 segundos.",
-            "Derrota: perder todas as 3 vidas.",
+            "Objetivo: abater 200 inimigos ou sobreviver 120 segundos.",
+            "Você perde se acabarem as vidas (corações).",
+            "Se pegar bolas vermelhas você ganha mais vidas.",
+            "Bolas azuis aumentam temporariamente a quantidade de tiros.",
+            " ",
+            "Comandos:",
             "A ou seta esquerda: mover para esquerda",
             "D ou seta direita: mover para direita",
             "ESPACO: atirar",
             "ESC: pausar",
             "ENTER ou ESC para voltar",
         )
-        self._info_screen("Instrucoes", lines)
+        self._info_screen("Instruções", lines)
 
     def _info_screen(self, title: str, lines: tuple[str, ...]) -> None:
         while True:
             self.screen.blit(self.background, (0, 0))
-            self.ui.clear_with_panel()
-            self.ui.draw_text(title, "large", YELLOW, center=(SCREEN_WIDTH // 2, 78))
-            for index, line in enumerate(lines):
-                self.ui.draw_text(line, "small", WHITE, center=(SCREEN_WIDTH // 2, 118 + index * 26))
+            panel = self.ui.clear_with_panel(pygame.Rect(20, 34, SCREEN_WIDTH - 40, SCREEN_HEIGHT - 68))
+            center_x = panel.centerx
+            y = panel.top + 24
+
+            self.ui.draw_text(title, "large", YELLOW, center=(center_x, y))
+            y += 44
+
+            for line in lines:
+                if line.strip():
+                    self.ui.draw_text(line, "small", WHITE, center=(center_x, y))
+                    y += 22
+                else:
+                    y += 14
+
             pygame.display.flip()
             self.clock.tick(60)
 

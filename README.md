@@ -28,17 +28,17 @@ python main.py
 - D ou seta direita: mover para direita
 - Espaco: atirar
 - ESC: pausar
-- ENTER: confirmar opcao de menu
+- ENTER: confirmar opção de menu
 
 ## Objetivo
 
 Controle a nave na parte inferior da tela, destrua os inimigos que descem do topo e sobreviva até vencer.
 
-O jogador vence ao destruir 50 inimigos ou sobreviver por 180 segundos. A derrota acontece quando as 3 vidas acabam.
+O jogador vence ao destruir 200 inimigos ou sobreviver por 120 segundos. A derrota acontece quando as 3 vidas acabam.
 
 No menu inicial, a opção `Instruções` mostra o objetivo, as condições de fim de jogo e os controles.
 
-Ao final de cada partida, o jogo pede o nome do jogador e salva a pontuação localmente em `data/high_score.txt`.
+Ao final de cada partida, o jogo pede o nome do jogador e salva a pontuação localmente em `data/high_score.db` usando SQLite3, que já vem com o Python.
 A tela `Pontuação` mostra as 10 melhores pontuações, ordenadas por maior número de pontos e, em caso de empate, pelo menor tempo.
 
 ## Estrutura
@@ -62,7 +62,7 @@ README.md
 
 ## Gerar executável com PyInstaller
 
-Depois de instalar as dependências (passo Instalação) basta executar o comando abaixo:
+Depois de instalar as dependências (no passo Instalação) basta executar o comando abaixo:
 
 ```powershell
 pyinstaller --onefile --windowed main.py
@@ -70,7 +70,7 @@ pyinstaller --onefile --windowed main.py
 
 Depois de compilar, copie a pasta `assets` para o mesmo diretório do executável gerado em `dist`.
 
-Estrutura esperada apos a compilação:
+Estrutura esperada após a compilação:
 
 ```text
 dist/

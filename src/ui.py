@@ -1,7 +1,7 @@
 import pygame
 
 from src.assets import load_image
-from src.settings import BLACK, CYAN, GREEN, IMAGE_FILES, ORANGE, SCREEN_WIDTH, SHADOW, WHITE, YELLOW
+from src.settings import BLACK, CYAN, GREEN, IMAGE_FILES, ORANGE, SCREEN_WIDTH, SHADOW, VICTORY_KILLS, WHITE, YELLOW
 
 
 class UI:
@@ -47,15 +47,16 @@ class UI:
         self.draw_text(f"Pontos: {score}", "small", WHITE, topleft=(12, 8))
         self.draw_text(f"Recorde: {high_score}", "small", CYAN, topleft=(128, 8))
         self.draw_text(f"Tempo: {time_left:03d}", "small", YELLOW, topleft=(270, 8))
-        self.draw_text(f"Abates: {kills}/50", "small", GREEN, topleft=(390, 8))
+        self.draw_text(f"Abates: {kills}/{VICTORY_KILLS}", "small", GREEN, topleft=(390, 8))
         for index in range(lives):
             self.screen.blit(self.heart, (SCREEN_WIDTH - 32 - index * 28, 8))
 
     def draw_button_hint(self, y: int) -> None:
         self.draw_text("Use setas/W/S para navegar e ENTER para confirmar", "small", ORANGE, center=(SCREEN_WIDTH // 2, y))
 
-    def clear_with_panel(self) -> pygame.Rect:
-        rect = pygame.Rect(58, 54, SCREEN_WIDTH - 116, 276)
+    def clear_with_panel(self, rect: pygame.Rect | None = None) -> pygame.Rect:
+        if rect is None:
+            rect = pygame.Rect(58, 54, SCREEN_WIDTH - 116, 276)
         pygame.draw.rect(self.screen, (BLACK[0], BLACK[1], BLACK[2], 205), rect, border_radius=8)
         pygame.draw.rect(self.screen, CYAN, rect, 2, border_radius=8)
         return rect

@@ -1,3 +1,4 @@
+import sqlite3
 import sys
 
 import pygame
@@ -13,6 +14,7 @@ from src.settings import (
     ENEMY_SPAWN_EVENT,
     FPS,
     GAME_DURATION,
+    HIGH_SCORE_DB,
     HIGH_SCORE_FILE,
     IMAGE_FILES,
     MENU_OPTIONS,
@@ -43,6 +45,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.ui = UI(self.screen)
         self.menu = Menu(self.screen, self.clock)
+        self.init_score_db()
         self.scores = self.load_scores()
 
     def run(self) -> None:
@@ -211,6 +214,49 @@ class Game:
         return int(self.scores[0]["score"]) if self.scores else 0
 
     def load_scores(self) -> list[dict[str, int | str]]:
+        self.migrate_legacy_scores()
+        with sqlite3.connect(HIGH_SCORE_DB) as conn:
+            rows = conn.execute(
+                """
+                SELECT name, score, time
+                FROM scores
+                ORDER BY score DESC, time ASC
+                LIMIT 10
+                """
+            ).fetchall()
+        return [{"name": row[0], "score": row[1], "time": row[2]} for row in rows]
+
+    def init_score_db(self) -> None:
+        DATA_DIR.mkdir(exist_ok=True)
+        with sqlite3.connect(HIGH_SCORE_DB) as conn:
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS scores (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT NOT NULL,
+                    score INTEGER NOT NULL,
+                    time INTEGER NOT NULL,
+                    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+                )
+                """
+            )
+
+    def migrate_legacy_scores(self) -> None:
+        if not HIGH_SCORE_FILE.exists():
+            return
+
+        with sqlite3.connect(HIGH_SCORE_DB) as conn:
+            score_count = conn.execute("SELECT COUNT(*) FROM scores").fetchone()[0]
+            if score_count > 0:
+                return
+
+            legacy_scores = self.load_legacy_scores()
+            conn.executemany(
+                "INSERT INTO scores (name, score, time) VALUES (?, ?, ?)",
+                [(str(item["name"]), int(item["score"]), int(item["time"])) for item in legacy_scores],
+            )
+
+    def load_legacy_scores(self) -> list[dict[str, int | str]]:
         scores = []
         try:
             lines = HIGH_SCORE_FILE.read_text(encoding="utf-8").splitlines()
@@ -236,17 +282,15 @@ class Game:
         return self.sort_scores(scores)[:10]
 
     def add_score(self, name: str, score: int, elapsed: int) -> None:
-        self.scores.append({"name": name[:12] or "Jogador", "score": score, "time": elapsed})
-        self.scores = self.sort_scores(self.scores)[:10]
-        self.save_scores()
+        with sqlite3.connect(HIGH_SCORE_DB) as conn:
+            conn.execute(
+                "INSERT INTO scores (name, score, time) VALUES (?, ?, ?)",
+                (name[:12] or "Jogador", score, elapsed),
+            )
+        self.scores = self.load_scores()
 
     def sort_scores(self, scores: list[dict[str, int | str]]) -> list[dict[str, int | str]]:
         return sorted(scores, key=lambda item: (-int(item["score"]), int(item["time"])))
-
-    def save_scores(self) -> None:
-        DATA_DIR.mkdir(exist_ok=True)
-        lines = [f'{item["name"]};{item["score"]};{item["time"]}' for item in self.scores]
-        HIGH_SCORE_FILE.write_text("\n".join(lines), encoding="utf-8")
 
     def ask_player_name(self, background: pygame.Surface) -> str:
         name = ""

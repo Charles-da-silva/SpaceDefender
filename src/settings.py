@@ -10,14 +10,15 @@ ASSETS_DIR = BASE_DIR / "assets"
 SOUNDS_DIR = ASSETS_DIR / "sounds"
 DATA_DIR = BASE_DIR / "data"
 HIGH_SCORE_FILE = DATA_DIR / "high_score.txt"
+HIGH_SCORE_DB = DATA_DIR / "high_score.db"
 
 SCREEN_WIDTH = 693
 SCREEN_HEIGHT = 392
 FPS = 60
 
 TITLE = "Space Defender"
-GAME_DURATION = 180
-VICTORY_KILLS = 50
+GAME_DURATION = 120
+VICTORY_KILLS = 200
 PLAYER_LIVES = 3
 
 PLAYER_SPEED = 6
@@ -40,7 +41,7 @@ CYAN = (69, 212, 255)
 BLACK = (7, 9, 19)
 SHADOW = (0, 0, 0)
 
-MENU_OPTIONS = ("Jogar", "Pontuacao", "Instrucoes", "Sair")
+MENU_OPTIONS = ("Jogar", "Pontuação", "Instruções", "Sair")
 PAUSE_OPTIONS = ("Continuar", "Reiniciar", "Voltar ao menu")
 END_OPTIONS = ("Jogar Novamente", "Sair")
 
